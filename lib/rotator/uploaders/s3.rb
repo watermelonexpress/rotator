@@ -1,30 +1,31 @@
 module Rotator
-  
+
   module Uploaders
-    
+  
     class S3 < Base
       # ACCESSORS ---------------------------------------------------------
       attr_accessor :key, :secret, :bucket
       attr_reader :s3_options
-      
+    
       # METHODS -----------------------------------------------------------
       def initialize(path, opts = {})
-        @include_hostname = opts.delete(:hostname)
+        @include_hostname = opts.delete(:hostname)||true
         set_s3_options(opts.delete(:s3_options))
         establish_connection
         check_connection
         super(path, opts)
       end
-      
+    
       def upload
         super
         create_bucket
-        AWS::S3::S3Object.store(filename, open(path), s3_path)
-        `rm #{path}`
+        response = AWS::S3::S3Object.store(filename, open(path), s3_path)
+        `rm #{path}` if response.code == 200
+        response
       end
-      
+
       def establish_connection; AWS::S3::Base.establish_connection!(s3_options); check_connection end
-      
+    
       def check_connection
         raise S3ConnectionError.new("Check your configuration settings and try again.") unless AWS::S3::Base.connected?
       end
@@ -44,10 +45,10 @@ module Rotator
         self.key = s3_options[:access_key_id]
         self.secret = s3_options[:secret_access_key]
       end
-      
-      def s3_path; bucket + @include_hostname ? ("/" + `hostname`.chomp) : "" end
-    end
     
-  end
+      def s3_path; bucket + (@include_hostname ? ("/" + `hostname`.chomp) : "") end
+    end
   
+  end
+
 end
