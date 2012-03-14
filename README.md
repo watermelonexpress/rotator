@@ -14,19 +14,22 @@ Rotator depends only on the aws/s3 gem and only if you use the S3 uploader (curr
 
 ## Rotator - user manual
 The process that Rotator follows in order to rotate a file is the following:
- _________ 			  ____________________
-|		  |			 |		              |
+
+```
+ _________            ____________________
+|         |          |                    |
 |  FILE   |          |        RENAME      |
 | foo.log | -------> | foo-2012-03-14.log |
-|_________|          |____________________|		    __________
-						        |                  |          |
-						        | ---------------> | TRANSFER |
-						        |                  |__________|
-					  _______________________
-					 |	     	             |
-					 |         GZIP          |
-					 | foo-2012-03-14.log.gz |
-					 |_______________________|
+|_________|          |____________________|         __________
+                                |                  |          |
+                                | ---------------> | TRANSFER |
+                                |                  |__________|
+                      _______________________
+                     |    	             |
+                     |         GZIP          |
+                     | foo-2012-03-14.log.gz |
+                     |_______________________|
+```
 
 The transfer method the Rotator currently supports is S3 uploading only.
 
