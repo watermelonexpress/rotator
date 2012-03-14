@@ -8,7 +8,7 @@ module Rotator
       include Errors
 
       # ACCESSORS ---------------------------------------------------------
-      attr_accessor :filename, :valid_extensions, :gzip_it
+      attr_accessor :filename, :valid_extensions, :gzip_it, :cptrunc
       attr_reader :path, :extension, :directory
     
       # METHODS -----------------------------------------------------------
@@ -16,6 +16,7 @@ module Rotator
         set_valid_extensions(opts[:valid_extensions])
         set_path_related_variables(path)
         self.gzip_it = opts[:gzip_it]||true
+        self.cptrunc = opts[:cptrunc]||true
       end
     
       def upload
@@ -31,7 +32,7 @@ module Rotator
     
       def rename(salt = Date.today.to_s, sep = "-")
         fn = directory + [filename.gsub(extension, ""), salt].join(sep) + extension
-        File.rename(path, fn)
+        cptrunc ?  `cp #{path} #{fn} && > #{path}` : File.rename(path, fn)
         set_path_related_variables(fn)
       end
 
@@ -54,11 +55,11 @@ module Rotator
         ) unless valid_extensions.member? extension
       end
     
-      def extensionify(str); str.match(/^\./) ? ("." + str) : str end
+      def extensionify(str); str.match(/^\./) ? str : ("." + str) end
       
       def unextensionify(str); str.gsub(/^\./, "") end
       # METHOD CLASSIFICATION -------------------------------------------------------------------------------
-      private :set_extension, :set_path_related_variables, :set_valid_extensions, :extensionify
+      private :set_extension, :set_path_related_variables, :set_valid_extensions, :extensionify, :unextensionify
     end
   
   end
