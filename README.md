@@ -25,7 +25,7 @@ The process that Rotator follows in order to rotate a file is the following:
                                 | ---------------> | TRANSFER |
                                 |                  |__________|
                       _______________________
-                     |    	             |
+                     |                       |
                      |         GZIP          |
                      | foo-2012-03-14.log.gz |
                      |_______________________|
