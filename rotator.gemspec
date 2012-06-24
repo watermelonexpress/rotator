@@ -20,6 +20,6 @@ Gem::Specification.new do |s|
 
   # specify any dependencies here; for example:
   s.add_development_dependency "rspec"
-  s.add_development_dependency "aws/s3"
-  # s.add_runtime_dependency "rest-client"
+  s.add_development_dependency "aws-sdk"
+  s.add_runtime_dependency "aws-sdk"
 end
