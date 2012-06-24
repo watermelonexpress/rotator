@@ -1,3 +1,4 @@
+require 'aws-sdk'
 require 'rotator/errors'
 require 'rotator/uploaders/base'
 require 'rotator/uploaders/s3'
