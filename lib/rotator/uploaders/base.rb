@@ -15,8 +15,8 @@ module Rotator
       def initialize(path, opts = {})
         set_valid_extensions(opts[:valid_extensions])
         set_path_related_variables(path)
-        self.gzip_it = opts[:gzip_it]||true
-        self.cptrunc = opts[:cptrunc]||true
+        self.gzip_it = opts[:gzip_it] || true
+        self.cptrunc = opts[:cptrunc] || true
       end
     
       def upload
@@ -58,6 +58,7 @@ module Rotator
       def extensionify(str); str.match(/^\./) ? str : ("." + str) end
       
       def unextensionify(str); str.gsub(/^\./, "") end
+
       # METHOD CLASSIFICATION -------------------------------------------------------------------------------
       private :set_extension, :set_path_related_variables, :set_valid_extensions, :extensionify, :unextensionify
     end

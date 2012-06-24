@@ -17,7 +17,7 @@ module Rotator
       def upload
         super
         create_bucket
-        connection.buckets[bucket].object[s3_path].write(File.open(path)).tap do |obj|
+        connection.buckets[bucket].objects[filename].write(File.new(path)).tap do |obj|
           `rm #{path}` if obj.exists?
         end
       end
@@ -26,7 +26,7 @@ module Rotator
         raise InvalidS3Configuration.new(
           "You must pass options as s3_options: { access_key_id: 'your_key', secret_access_key: 'your_secret' ... } "
         ) if opts.blank?
-        self.bucket = opts.delete(:bucket)||'rotator.files'
+        self.bucket = opts.delete(:bucket) || "#{get_hostname}.rotator.files"
         @s3_options = opts
         @connection = AWS::S3.new(s3_options)
       end
@@ -35,7 +35,9 @@ module Rotator
         connection.buckets.create(bucket) unless connection.buckets[bucket].exists?
       end
     
-      def s3_path; bucket + (@hostname ? ("/" + `hostname`.chomp) : "") end
+      def s3_path; bucket + (@hostname ? ("/" + get_hostname) : "") end
+      
+      def get_hostname; `hostname`.chomp end
     end
   
   end
