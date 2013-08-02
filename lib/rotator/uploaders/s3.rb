@@ -15,7 +15,8 @@ module Rotator
       end
 
       def upload
-        super
+        rename(Time.now.to_i)
+        gzip if  gzip_it
         create_bucket
         connection.buckets[bucket].objects[filename].write(File.new(path)).tap do |obj|
           `rm #{path}` if obj.exists?
