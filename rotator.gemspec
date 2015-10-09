@@ -20,5 +20,6 @@ Gem::Specification.new do |s|
 
   # specify any dependencies here; for example:
   s.add_development_dependency "rspec"
-  s.add_runtime_dependency "aws-sdk"
+  s.add_development_dependency "byebug"
+  s.add_runtime_dependency "aws-sdk", '~> 1.66.0', '< 2.0.0'
 end

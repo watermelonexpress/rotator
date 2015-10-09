@@ -29,7 +29,7 @@ module Rotator
         ) if opts.nil?
         self.bucket = opts.delete(:bucket) || opts.delete("bucket") || "#{get_hostname}.rotator.files"
         @s3_options = opts
-        @connection = AWS::S3.new(s3_options)
+        @connection = ::AWS::S3.new(s3_options)
       end
 
       def create_bucket
